@@ -27,7 +27,7 @@ void addi(dec_inst inst) {
 
 void slti(dec_inst inst){
     extend12(inst);
-    regs[inst.rd] = (int32_t)regs[inst.rs1] < inst.imm ? 1 : 0;
+    regs[inst.rd] = (int32_t)regs[inst.rs1] < (int32_t)inst.imm ? 1 : 0;
 }
 
 void sltiu(dec_inst inst){
@@ -57,8 +57,8 @@ void slli(dec_inst inst){
 }
 
 void srli_srai(dec_inst inst){
-  if((inst.imm & 0b10000000000) == 0)
-    regs[inst.rd] =  (uint32_t)regs[inst.rs1] >> inst.imm;
+  if((inst.funct7 & 0b1000000) == 0)
+    regs[inst.rd] =  (uint32_t)regs[inst.rs1] >> (inst.imm &0x1F);
   else
     regs[inst.rd] =  (int32_t)regs[inst.rs1] >> (inst.imm &0x1F);
 }

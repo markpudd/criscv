@@ -71,65 +71,65 @@ void set_sp(uint32_t p) {
 int step() {
 
   uint32_t instruction =  *(uint32_t*)(mem+pc);
-  printf("Ins=%08X\n",instruction);
+//  printf("Ins=%08X\n",instruction);
 
   dec_inst dinst = decode_instruction(instruction);
-  dump_instruction(dinst);
+//  dump_instruction(dinst);
 
   pc += 4;
   switch(dinst.opcode) {
     case 0b0110111:   // LUI
         tou(dinst);
-        dump_instruction(dinst);
+//        dump_instruction(dinst);
         lui(dinst);
         break;
     case 0b0010111:   // AUIPC
         tou(dinst);
-        dump_instruction(dinst);
+//        dump_instruction(dinst);
         auipc(dinst);
         break;
     case 0b1101111:   // JAL
         toj(dinst);
         extend20(dinst);
-        dump_instruction(dinst);
+  //      dump_instruction(dinst);
         jal(dinst);
         break;
     case 0b1100111:   // JALR
         toi(dinst);
-        dump_instruction(dinst);
+//        dump_instruction(dinst);
         jalr(dinst);
         break;
     case 0b1100011:   // Branches
         tos(dinst);
         extend12(dinst);
-        dump_instruction(dinst);
+  //      dump_instruction(dinst);
         run_branch(dinst);
         break;
     case 0b0000011:   // Loads
         toi(dinst);
-        dump_instruction(dinst);
+//        dump_instruction(dinst);
         run_load(dinst);
         break;
     case 0b0100011:   // SB
         tos(dinst);
-        dump_instruction(dinst);
+//        dump_instruction(dinst);
         run_sb(dinst);
         break;
     case 0b0010011:   // A.L.U.
         toi(dinst);
-        dump_instruction(dinst);
+//        dump_instruction(dinst);
         run_alu(dinst);
         break;
     case 0b0110011:  // ALU2
-        dump_instruction(dinst);
+//        dump_instruction(dinst);
         run_alu2(dinst);
         break;
     case 0b0001111:  // Fence
-        dump_instruction(dinst);
+  //      dump_instruction(dinst);
         fence(dinst);
         break;
     case 0b1110011:  // ECALL/EBREAK
-        dump_instruction(dinst);
+  //      dump_instruction(dinst);
         dinst.rs2 == 0 ? ecall(dinst) : ebreak(dinst);
         break;
     default:
@@ -158,8 +158,7 @@ void lui(dec_inst inst)  {
 
 
 void auipc(dec_inst inst)  {
-  regs[inst.rd] = pc+inst.raw & 0xFFFFF000;
-
+  regs[inst.rd] = pc-4+ (inst.raw & 0xFFFFF000);
 }
 
 void jal(dec_inst inst)  {

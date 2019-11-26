@@ -28,11 +28,45 @@ void addi_test() {
   TEST_EQUALS_ASSERT("addi negative test", regs[3],30);
 }
 void slti_test() {
-  // TODO
+  dec_inst inst = alu_setup_test();
+  inst.funct3=0b010;
+  regs[1] = 1;
+  inst.imm = 2;
+  run_alu(inst);
+  TEST_EQUALS_ASSERT("slti less test", regs[3],1);
+  regs[1] = 2;
+  inst.imm = 2;
+  run_alu(inst);
+  TEST_EQUALS_ASSERT("slti equal test", regs[3],0);
+  regs[1] = 3;
+  inst.imm = 2;
+  run_alu(inst);
+  TEST_EQUALS_ASSERT("slti more test", regs[3],0);
+  regs[1] =  0xFFFFFFFD; // -3;
+  inst.imm = 2;
+  run_alu(inst);
+  TEST_EQUALS_ASSERT("slti neg num test", regs[3],1);
 }
 
 void sltiu_test() {
-  // TODO
+  dec_inst inst = alu_setup_test();
+  inst.funct3=0b011;
+  regs[1] = 1;
+  inst.imm = 2;
+  run_alu(inst);
+  TEST_EQUALS_ASSERT("sltui less test", regs[3],1);
+  regs[1] = 2;
+  inst.imm = 2;
+  run_alu(inst);
+  TEST_EQUALS_ASSERT("sltui equal test", regs[3],0);
+  regs[1] = 3;
+  inst.imm = 2;
+  run_alu(inst);
+  TEST_EQUALS_ASSERT("sltui more test", regs[3],0);
+  regs[1] = 0xFFFFFFFD;
+  inst.imm = 2;
+  run_alu(inst);
+  TEST_EQUALS_ASSERT("sltui neg num test", regs[3],0);
 }
 void xori_test() {
   dec_inst inst = alu_setup_test();
@@ -75,11 +109,46 @@ void andi_test() {
 }
 
 void slli_test() {
-  // TODO
+  dec_inst inst = alu_setup_test();
+  inst.funct3=0b001;
+  regs[1] = 0b11;
+  inst.imm = 0b10;
+  run_alu(inst);
+  TEST_EQUALS_ASSERT("slli shift test", regs[3],0b1100);
+  regs[1] = 0b11;
+  inst.imm = 0b100010;
+  run_alu(inst);
+  TEST_EQUALS_ASSERT("slli shift test more 5 bits", regs[3],0b1100);
 }
 
 void srli_srai_test() {
-  // TODO
+  dec_inst inst = alu_setup_test();
+  inst.funct3=0b101;
+  regs[1] = 8;
+  inst.imm = 2;
+  run_alu(inst);
+  TEST_EQUALS_ASSERT("srli_srai srli test", regs[3],2);
+  regs[1] = 8;
+  inst.imm = 0b100010;
+  run_alu(inst);
+  TEST_EQUALS_ASSERT("srli_srai srli test (more 5 bits)", regs[3],2);
+  regs[1] = 0xffffffff;
+  inst.imm = 0b10;
+  run_alu(inst);
+  TEST_EQUALS_ASSERT("srli_srai srli test neg", regs[3],0x3fffffff);
+  inst.funct7=0b1000000;
+  regs[1] = 8;
+  inst.imm = 2;
+  run_alu(inst);
+  TEST_EQUALS_ASSERT("srli_srai srai test", regs[3],2);
+  regs[1] = 8;
+  inst.imm = 0b100010;
+  run_alu(inst);
+  TEST_EQUALS_ASSERT("srli_srai srai test (more 5 bits)", regs[3],2);
+  regs[1] = 0xffffffff;
+  inst.imm = 0b10;
+  run_alu(inst);
+  TEST_EQUALS_ASSERT("srli_srai srai test neg", regs[3],0xffffffff);
 }
 
 void run_alu_tests() {
