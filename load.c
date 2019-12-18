@@ -7,6 +7,7 @@ extern uint8_t *mem;
 void (*ld_fn[])(dec_inst) = {lb, lh, lw, lbu, lhu, perr, perr, perr};
 
 void run_load(dec_inst inst) {
+
   return (*ld_fn[inst.funct3]) (inst);
 }
 
@@ -28,7 +29,7 @@ void lw(dec_inst inst)  {
 
 void lbu(dec_inst inst)  {
   extend12(inst);
-  regs[inst.rd] = *(uint8_t*)(mem+(int32_t)(regs[inst.rs1]+inst.imm)); 
+  regs[inst.rd] = *(uint8_t*)(mem+(int32_t)(regs[inst.rs1]+inst.imm));
 }
 
 void lhu(dec_inst inst)  {
