@@ -1,6 +1,10 @@
 # Prerequisites
 *.d
 
+test
+idc
+runmem
+
 # Object files
 *.o
 *.ko
