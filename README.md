@@ -41,8 +41,48 @@ dump_regsiters();  // Optionally dump registers
 
 # Running code built with GCC (RISC-V)
 
-It possible to run simple code built with gcc however system calls will not work.  
+It possible to run simple code built with gcc and view register states, however system calls will not work.  
 
-TODO add simple tutorial for this
+Firstly you will need to build the gcc toolchain to enable rv23i architecture:-
+
+<pre><code>
+./configure --prefix=/opt/riscv  --with-arch=rv32i --with-abi=ilp32
+</code></pre>
+
+Then for an example we can create a simple main method:-
+
+<pre><code>
+int main() {
+    int a=10,b=20;
+    return a*b;
+}
+</code></pre>
+
+Once this is done you can build an opbject file with the following:-
+
+<pre><code>
+/opt/riscv/bin/riscv32-unknown-elf-gcc -c test.c 
+</code></pre>
+
+You can ten extract the binary file with:-
+
+<pre><code>
+/opt/riscv/bin/riscv32-unknown-elf-objcopy --dump-section .text=out test.o   
+</code></pre>
+
+Now you can step through the binary.  Firstly build the memory runner:-
+
+<pre><code>
+make runmem  
+</code></pre> 
+
+Now run the code and see the register dump:-
+
+<pre><code>
+runmem out
+</code></pre> 
+
+
+# fence, ecall and ebreak 
 
 fence, ecall and ebreak currently just call sbreak which outputs some text.   This will be changed to a call back in a later revision.
